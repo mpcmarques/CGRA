@@ -20,7 +20,7 @@ LightingScene.prototype.init = function(application) {
 
 	this.initLights();
 
-	this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+	this.gl.clearColor(0.0, 191/255, 1.0, 1.0);
 	this.gl.clearDepth(100.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
@@ -30,49 +30,6 @@ LightingScene.prototype.init = function(application) {
 
 	//	Enables textures
 	this.enableTextures(true);
-
-	// Scene elements
-	this.table = new MyTable(this);
-	this.wall = new Plane(this, 1, 0, 1, 0, 1);
-	this.leftWall = new MyQuad(this, 2 , -1 , 2, -1);
-	this.floor = new MyQuad(this , 0, 10, 0, 12);
-	this.clock = new MyClock(this);
-	
-	this.boardA = new Plane(this, BOARD_A_DIVISIONS, 0, 1, 0, 1);
-	this.boardB = new Plane(this, BOARD_B_DIVISIONS, 0, 1, 0, 1);
-
-	// Materials
-	this.materialDefault = new CGFappearance(this);
-
-	//	Table appearance
-	this.tableAppearance = new CGFappearance(this);
-	this.tableAppearance.loadTexture("../resources/images/table.png");
-	this.tableAppearance.setSpecular(0.2,0.2,0.2,1);
-	this.tableAppearance.setDiffuse(0.8,0.8,0.8,1);
-	this.tableAppearance.setShininess(30);
-
-	//	Floor appearance
-	this.floorAppearance = new CGFappearance(this);
-	this.floorAppearance.loadTexture("../resources/images/floor.png");
-	
-	//	Window appearance
-	this.windowAppearance = new CGFappearance(this);
-	this.windowAppearance.loadTexture("../resources/images/window.png");
-	this.windowAppearance.setTextureWrap('CLAMP_TO_EDGE', 'CLAMP_TO_EDGE');
-
-	//	Slides appearance
-	this.slidesAppearance = new CGFappearance(this);
-	this.slidesAppearance.loadTexture("../resources/images/slides.png");
-	this.slidesAppearance.setSpecular(0.2,0.2,0.2,1);
-	this.slidesAppearance.setDiffuse(0.8,0.8,0.8,1);
-	this.slidesAppearance.setShininess(30);
-
-	//	Board appearance
-	this.boardAppearance = new CGFappearance(this);
-	this.boardAppearance.loadTexture("../resources/images/board.png");
-	this.boardAppearance.setSpecular(0.6,0.6,0.6,1);
-	this.boardAppearance.setShininess(200);
-	this.boardAppearance.setDiffuse(0.2,0.2,0.2,1);
 
 	//	enable timer
 	this.setUpdatePeriod(1000);
@@ -149,7 +106,6 @@ LightingScene.prototype.display = function() {
 	// Draw axis
 	this.axis.display();
 
-	this.materialDefault.apply();
 
 	// ---- END Background, camera and axis setup
 
@@ -160,82 +116,16 @@ LightingScene.prototype.display = function() {
 
 	// ---- BEGIN Primitive drawing section
 
-	// Plane Wall
-	this.pushMatrix();
-		this.translate(7.5, 4, 0);
-		this.scale(15, 8, 0.2);
-		this.wall.display();
-	this.popMatrix();
-
-	// Left Wall
-	this.pushMatrix();
-		//	Apply texture
-		this.windowAppearance.apply();
-		this.translate(0, 4, 7.5);
-		this.rotate(90 * degToRad, 0, 1, 0);
-		this.scale(15, 8, 0.2);
-		this.leftWall.display();
-	this.popMatrix();
-
-	// Floor
-	this.pushMatrix();
-		//	Apply texture
-		this.floorAppearance.apply();
-		this.translate(7.5, 0, 7.5);
-		this.rotate(-90 * degToRad, 1, 0, 0);
-		this.scale(15, 15, 0.2);
-		this.floor.display();
-	this.popMatrix();
-
-	// First Table
-	this.pushMatrix();
-		this.translate(5, 0, 8);
-		this.table.display();
-	this.popMatrix();
-
-	// Second Table
-	this.pushMatrix();
-		this.translate(12, 0, 8);
-		this.table.display();
-	this.popMatrix();
-
-	// Board A
-	this.pushMatrix();
-		this.translate(4, 4.5, 0.2);
-		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1);
-
-		//	Apply texture
-		this.slidesAppearance.apply();
-		
-		this.boardA.display();
-	this.popMatrix();
-
-	// Board B
-	this.pushMatrix();
-		this.translate(10.5, 4.5, 0.2);
-		this.scale(BOARD_WIDTH, BOARD_HEIGHT, 1);
-
-		//	Apply texture
-		this.boardAppearance.apply();
-		
-		this.boardB.display();
-	this.popMatrix();
-
-	//	Clock
-	this.pushMatrix();
-		this.translate(7.3, 7.2, 0);
-		
-		this.clock.display();
-	this.popMatrix();
+	
 
 	// ---- END Primitive drawing section
 };
 
 // update function
 LightingScene.prototype.update = function(currTime){
-	this.clock.update(currTime);
+	
 }
 
 LightingScene.prototype.doSomething = function(){
 	console.log("Doing something..");
-}
+};
