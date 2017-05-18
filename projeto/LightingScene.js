@@ -1,11 +1,5 @@
 var degToRad = Math.PI / 180.0;
 
-var BOARD_WIDTH = 6.0;
-var BOARD_HEIGHT = 4.0;
-
-var BOARD_A_DIVISIONS = 100;
-var BOARD_B_DIVISIONS = 100;
-
 function LightingScene() {
 	CGFscene.call(this);
 }
@@ -38,6 +32,10 @@ LightingScene.prototype.init = function(application) {
 	this.option1 = true;
 	this.option2 = false;
 	this.speed = 3;
+	
+	//Scene Elements
+	this.submarine = new MySubmarine(this);
+
 };
 
 LightingScene.prototype.initCameras = function() {
@@ -116,7 +114,8 @@ LightingScene.prototype.display = function() {
 
 	// ---- BEGIN Primitive drawing section
 
-	
+	//Scene Elements
+	this.submarine.display();
 
 	// ---- END Primitive drawing section
 };
