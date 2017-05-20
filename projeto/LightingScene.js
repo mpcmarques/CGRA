@@ -245,30 +245,33 @@ LightingScene.prototype.moveTorpedoes = function(){
 	for(var i = 0; i < this.torpedoes.length; i++){
 		var torpedo = this.torpedoes[i];
 		// update torpedo
-		if (torpedo.animationTime + 1/100 <= torpedo.durationTime){
+		if (torpedo.animationTime <= torpedo.durationTime){
 			torpedo.animationTime += 1/100;
-		}
 
-		// torpedo has a target
-		if( torpedo.target != null ){
+			var deltaT = torpedo.animationTime / torpedo.durationTime;
+			//console.log("Delta T: " + deltaT + " Animation time: " + torpedo.animationTime + " Duration time: " + torpedo.durationTime);
+
+			// torpedo has a target
+			if( torpedo.target != null ){
 			// move torpedo next to target
-
 			torpedo.x = this.bezier(torpedo.x, 
-						torpedo.x ,
-			 			torpedo.target.x ,
+						torpedo.x,
 			 			torpedo.target.x,
-			 			torpedo.animationTime / torpedo.durationTime);
+			 			torpedo.target.x,
+			 			deltaT);
 			torpedo.y = this.bezier(torpedo.y, 
-						torpedo.y ,
+						torpedo.y,
 			 			torpedo.target.y,
 			 			torpedo.target.y,
-			 			torpedo.animationTime / torpedo.durationTime);
+			 			deltaT);
 			 torpedo.z = this.bezier(torpedo.z, 
-						torpedo.z ,
-			 			torpedo.target.z ,
+						torpedo.z,
 			 			torpedo.target.z,
-			 			torpedo.animationTime / torpedo.durationTime);
-		}			
+			 			torpedo.target.z,
+			 			deltaT);
+			//console.log(torpedo.y);
+			}	
+		}	
 	}
 }
 
@@ -303,7 +306,6 @@ LightingScene.prototype.bezier = function(P1, P2, P3, P4, t) {
 	+ 3 * Math.pow(t,2) * (1 - t) * P3 
 	+ Math.pow(t,3) * P4;
 		
-	//console.log("bezier: " + P1 + " " + P2 + " " + P3 + " " + P4 + " T " + t + " RES " + qT );
 	return qT;
 };
 
