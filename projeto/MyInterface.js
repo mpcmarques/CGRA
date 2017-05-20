@@ -23,25 +23,20 @@ MyInterface.prototype.init = function(application) {
 	// init GUI. For more information on the methods, check:
 	//  http://workshop.chromeexperiments.com/examples/gui
 	
-	this.gui = new dat.GUI();
-
-	// add a button:
-	// the first parameter is the object that is being controlled (in this case the scene)
-	// the identifier 'doSomething' must be a function declared as part of that object (i.e. a member of the scene class)
-	// e.g. LightingScene.prototype.doSomething = function () { console.log("Doing something..."); }; 
-
-	this.gui.add(this.scene, 'doSomething');	
+	this.gui = new dat.GUI();	
 
 	// add a group of controls (and open/expand by defult)
 	
-	var group=this.gui.addFolder("Options");
+	var group=this.gui.addFolder("Luzes");
 	group.open();
 
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
 	// e.g. this.option1=true; this.option2=false;
 	
-	group.add(this.scene, 'option1');
-	group.add(this.scene, 'option2');
+	group.add(this.scene, 'light1');
+	group.add(this.scene, 'light2');
+
+	this.gui.add(this.scene, 'pauseClock');
 	
 	// add a slider
 	// must be a numeric variable of the scene, initialized in scene.init e.g.
@@ -68,6 +63,19 @@ MyInterface.prototype.processKeyboard = function(event) {
 	switch (event.keyCode)
 	{
 		case (65):	// only works for capital 'A', as it is
-			console.log("Key 'A' pressed");
+			this.scene.rotateSubmarine(Math.PI/6);
+		break;
+		case (68): // capital 'D';
+			this.scene.rotateSubmarine(-Math.PI/6);
+		break;
+		case (87):	// capital 'W';
+			this.scene.moveSubmarine(true);
+		break;
+		case (83):	// capital 'S';
+			this.scene.moveSubmarine(false);
+		break;
+		case (70): // capital 'F';
+			this.scene.launchTorpedo();
+		break;
 	};
 };

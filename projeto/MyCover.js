@@ -1,8 +1,8 @@
 /**
- * MyClockFront
+ * MyCover
  * @constructor
  */
- function MyClockFront(scene, slices) {
+ function MyCover(scene, slices) {
  	CGFobject.call(this,scene);
 
     this.slices = slices;
@@ -10,10 +10,10 @@
  	this.initBuffers();
  };
 
-MyClockFront.prototype = Object.create(CGFobject.prototype);
-MyClockFront.prototype.constructor = MyClockFront;
+MyCover.prototype = Object.create(CGFobject.prototype);
+MyCover.prototype.constructor = MyCover;
 
-MyClockFront.prototype.initBuffers = function() {
+MyCover.prototype.initBuffers = function() {
  	//	Init with empty arrays
  	this.vertices = [];
  	this.indices = [];

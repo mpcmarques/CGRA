@@ -27,6 +27,7 @@
  	this.vertices = [];
  	this.indices = [];
  	this.normals = [];
+ 	this.texCoords = [];
  	
 	//	Calculate vertice coordinate
 	var ang = 0;
@@ -40,21 +41,25 @@
  			//	Vertice 0 do retangulo
  			this.vertices.push(0.5 * Math.cos(ang), 0.5 * Math.sin(ang),j);
  			this.normals.push( 0.5 * Math.cos(ang),  0.5 * Math.sin(ang),0);
+ 			this.texCoords.push( i / this.slices, 0);
 
  			//	Vertice 2 do retangulo
 			this.vertices.push( 0.5 * Math.cos(ang),  0.5 * Math.sin(ang),j + 1);
 			this.normals.push( 0.5 * Math.cos(ang), 0.5 * Math.sin(ang),0);
-
+			this.texCoords.push( i / this.slices, 1);
+			
 			ang = ang + rotation;
 
  			//	Vertice 1 do retangulo
 			this.vertices.push( 0.5 * Math.cos(ang),  0.5 * Math.sin(ang),j);
 			this.normals.push( 0.5 * Math.cos(ang),  0.5 * Math.sin(ang),0);
+			this.texCoords.push( (i+1)/ this.slices, 0);
 		
 			//	Vertice 3 do retangulo
 			this.vertices.push( 0.5 * Math.cos(ang),  0.5 * Math.sin(ang),j + 1);
 			this.normals.push( 0.5 * Math.cos(ang),  0.5 * Math.sin(ang),0);
-			
+			this.texCoords.push( (i+1)/this.slices, 1);
+
 			//	Indices
 			this.indices.push(indCounter+1);
 			this.indices.push(indCounter);

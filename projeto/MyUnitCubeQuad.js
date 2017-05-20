@@ -33,13 +33,14 @@ MyUnitCubeQuad.prototype.display = function () {
 	//	Back side
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,-0.5);
-	this.scene.rotate(fullturn,0.5,0,0);
+	this.scene.rotate(-fullturn,0.5,0,0);
 	this.quad.display();
 	this.scene.popMatrix();
 	// Left side
 	this.scene.pushMatrix();
 	this.scene.translate(-0.5,0,0);
-	this.scene.rotate(halfturn,0,0.5,0);
+	this.scene.rotate(-halfturn,0,0,1);
+	this.scene.rotate(halfturn,1,0,0);
 	this.quad.display();
 	this.scene.popMatrix();
 	// Right side

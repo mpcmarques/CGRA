@@ -5,7 +5,6 @@
  */
 function MyFloor(scene) {
 	CGFobject.call(this,scene);
-	
 };
 
 MyFloor.prototype = Object.create(CGFobject.prototype);

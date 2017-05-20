@@ -7,7 +7,7 @@
  	CGFobject.call(this,scene);
 	//clock
 	this.prism = new MyCilinder(this.scene, 12, 1);
-	this.front = new MyClockFront(this.scene, 12);
+	this.front = new MyCover(this.scene, 12);
 
 	//pointers
 	this.hourPointer = new MyClockHand(this.scene, 0.02, 0.23);
