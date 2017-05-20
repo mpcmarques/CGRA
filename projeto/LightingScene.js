@@ -254,13 +254,13 @@ LightingScene.prototype.moveTorpedoes = function(){
 			// move torpedo next to target
 
 			torpedo.x = this.bezier(torpedo.x, 
-						torpedo.x + 6 ,
+						torpedo.x ,
 			 			torpedo.target.x ,
 			 			torpedo.target.x,
 			 			torpedo.animationTime / torpedo.durationTime);
 			torpedo.y = this.bezier(torpedo.y, 
 						torpedo.y ,
-			 			torpedo.target.y + 3 ,
+			 			torpedo.target.y,
 			 			torpedo.target.y,
 			 			torpedo.animationTime / torpedo.durationTime);
 			 torpedo.z = this.bezier(torpedo.z, 

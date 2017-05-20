@@ -59,12 +59,14 @@ MySubmarine.prototype.display = function () {
 	this.scene.scale(0.73,1,4.08);
 	this.body.display();
 	this.scene.popMatrix();
+	
 	//  Ponta Inicial
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,4.54);
 	this.scene.scale(0.73/2,1/2,0.46);
 	this.frontedge.display();
 	this.scene.popMatrix();
+
 	//  Ponta Final
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,0.46);

@@ -11,7 +11,7 @@
  	this.z = z;
  	this.angle = angle;
  	this.target = target;
- 	this.durationTime = Math.sqrt((this.x - this.target.x) + (this.y - this.target.y) + (this.z - this.target.z));
+ 	this.durationTime = Math.sqrt(Math.pow(this.x - this.target.x,2) + Math.pow(this.y - this.target.y,2) + Math.pow(this.z - this.target.z,2));
 	this.animationTime = 0;
 	
 	//body
