@@ -55,7 +55,8 @@ MySubmarine.prototype.constructor=MySubmarine;
 MySubmarine.prototype.display = function () {
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,-2.5);
-	this.scene.metalAppearance.apply();
+	//console.log(this.scene.currentSubmarineAppearance);
+	this.scene.submarineAppearances[this.scene.currentSubmarineAppearance].apply();
 
 	//	Cilindro Principal
 	this.scene.pushMatrix();

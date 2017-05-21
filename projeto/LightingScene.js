@@ -34,6 +34,8 @@ LightingScene.prototype.init = function(application) {
 	this.clockLight = false;
 	this.isClockPaused = false;
 	this.speed = 3;
+	this.currentSubmarineAppearance = 0;
+	this.submarineAppearanceList = {"Metal": 0, "Blue":1};
 
 	/* SUBMARINE */
 	this.submarineX = 8;
@@ -93,6 +95,8 @@ LightingScene.prototype.init = function(application) {
 	this.blueMetalAppearance.setSpecular(0,0,1,1);
 	this.blueMetalAppearance.setShininess(50);
 
+	// submarine appearances
+	this.submarineAppearances = [this.metalAppearance, this.blueMetalAppearance];
 };
 
 LightingScene.prototype.initCameras = function() {
@@ -303,6 +307,10 @@ LightingScene.prototype.moveTorpedoes = function(){
 					 torpedo.target.position.z);
 
 			// calcular new position
+			var oldPos = new Position(torpedo.position.x,
+												torpedo.position.y,
+												torpedo.position.z);
+
 			var newPos = this.bezier3(p0,
 						p1,
 			 			p2,
@@ -312,11 +320,7 @@ LightingScene.prototype.moveTorpedoes = function(){
 
 
 			//console.log(torpedo.y);
-			torpedo.inclination = -this.bezier3Angle(deltaT,
-							p0,
-							p0,
-							p2,
-							torpedo.target.position) * Math.PI/2;
+			//torpedo.inclination = (torpedo.position.y - oldPos.y) / deltaT;
 			}
 			} else {
 				/*/ remove torpedo target
@@ -375,6 +379,7 @@ LightingScene.prototype.bezier = function(p0, p1, p2, p3, dest) {
       bZ = 3 * (p2.z - p1.z) - cZ,
       aZ = p3.z - p0.z - cZ - bZ;
 
+	dest.inclination =
   dest.x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
   dest.y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
   dest.z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + p0.z;
