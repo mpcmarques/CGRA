@@ -36,9 +36,9 @@ LightingScene.prototype.init = function(application) {
 	this.speed = 3;
 
 	/* SUBMARINE */
-	this.submarineX = 5;
-	this.submarineZ = 5;
-	this.submarineY = 5;
+	this.submarineX = 8;
+	this.submarineZ = 8;
+	this.submarineY = 8;
 	this.submarineAngle = Math.PI - Math.PI/6;
 
 	/* TORPEDOES */
@@ -68,7 +68,7 @@ LightingScene.prototype.init = function(application) {
 	this.greenAppearance = new CGFappearance(this);
 	this.greenAppearance.setSpecular(0.3,0.5,1,1);
 	this.greenAppearance.setDiffuse(0.1,0.1,0.1,1);
-	this.greenAppearance.setAmbient(0,0,1);
+	this.greenAppearance.setAmbient(0,0,0,1);
 	this.greenAppearance.setShininess(10);
 
 	//	water appearance
@@ -79,6 +79,20 @@ LightingScene.prototype.init = function(application) {
 	this.waterAppearance.setDiffuse(0.8,0.8,0.8,1);
 	this.waterAppearance.setShininess(30);
 
+	// appearance
+	this.metalAppearance = new CGFappearance(this);
+	this.metalAppearance.loadTexture("../resources/images/galvanized_metal.jpg");
+	this.metalAppearance.setDiffuse(1,1,1,1);
+	this.metalAppearance.setAmbient(0,0,0,1);
+	this.metalAppearance.setSpecular(1,1,1,1);
+	this.metalAppearance.setShininess(100);
+
+	this.blueMetalAppearance = new CGFappearance(this);
+	this.blueMetalAppearance.loadTexture("../resources/images/galvanized_metal.jpg");
+	this.blueMetalAppearance.setDiffuse(0,0,1,1);
+	this.blueMetalAppearance.setSpecular(0,0,1,1);
+	this.blueMetalAppearance.setShininess(50);
+
 };
 
 LightingScene.prototype.initCameras = function() {
@@ -87,7 +101,7 @@ LightingScene.prototype.initCameras = function() {
 
 LightingScene.prototype.initLights = function() {
 	this.setGlobalAmbientLight(0.4,0.4,0.4, 1.0);
-	
+
 	// Positions for light
 	this.lights[0].setPosition(8, 15, 8, 1);
 	this.lights[1].setPosition(8, 3, 8, 1);
@@ -98,8 +112,8 @@ LightingScene.prototype.initLights = function() {
 	this.lights[0].setSpecular(1,1,1,1);
 	this.lights[0].setDiffuse(1,1,1,1);
 	this.lights[0].setConstantAttenuation(1);
-	
-	
+
+
 	// light 1
 	this.lights[1].setSpecular(30/255,144/255,1,1);
 	this.lights[1].setDiffuse(30/255,144/255,1,1);
@@ -161,7 +175,7 @@ LightingScene.prototype.display = function() {
 
 	// plane
 	this.pushMatrix();
-		this.translate(5, 0, 5);	
+		this.translate(5, 0, 5);
 		this.rotate(Math.PI/2, 1,0,0);
 		this.rotate(Math.PI,0,1,0);
 		this.scale(100,100,1);
@@ -175,7 +189,7 @@ LightingScene.prototype.display = function() {
 		this.translate(8,0,0);
 		this.post.display();
 	this.popMatrix();
-	
+
 	// targets
 	for(var i = 0; i < this.targets.length; i++){
 		// target
@@ -195,16 +209,16 @@ LightingScene.prototype.display = function() {
 
 // update function
 LightingScene.prototype.update = function(currTime){
-	
+
 	// update clock
 	if(this.isClockPaused == false){
 		this.post.clock.update(currTime);
 	}
-	
+
 
 	// update gui options
 	if(this.globalLight  == true){
-		this.lights[0].enable();	
+		this.lights[0].enable();
 	} else {
 		this.lights[0].disable();
 	}
@@ -223,6 +237,9 @@ LightingScene.prototype.update = function(currTime){
 
 	// move torpedoes
 	this.moveTorpedoes();
+
+	// move submarine
+	this.moveSubmarine(false, this.speed/100);
 }
 
 // Pause clock function
@@ -234,7 +251,7 @@ LightingScene.prototype.pauseClock = function(){
 		this.isClockPaused = true;
 		console.log("Clock stopped\n");
 	}
-}; 
+};
 
 // Rotate submarine
 LightingScene.prototype.rotateSubmarine = function(rotation){
@@ -242,9 +259,9 @@ LightingScene.prototype.rotateSubmarine = function(rotation){
 };
 
 // Move submarine
-LightingScene.prototype.moveSubmarine = function(isForward){
-	var deltaX = Math.sin(this.submarineAngle);
-	var deltaZ = Math.cos(-this.submarineAngle);
+LightingScene.prototype.moveSubmarine = function(isForward, speed){
+	var deltaX = Math.sin(this.submarineAngle) * speed;
+	var deltaZ = Math.cos(-this.submarineAngle) * speed;
 
 	if(isForward == true){
 		this.submarineX += deltaX;
@@ -261,7 +278,7 @@ LightingScene.prototype.moveTorpedoes = function(){
 
 	for(var i = 0; i < this.torpedoes.length; i++){
 		var torpedo = this.torpedoes[i];
-	
+
 		// update torpedo
 		if (torpedo.animationTime <= torpedo.durationTime){
 
@@ -279,14 +296,14 @@ LightingScene.prototype.moveTorpedoes = function(){
 
 			var p1 = new Position((torpedo.launchPosition.x + 6) * Math.sin(torpedo.startingAngle),
 							 torpedo.launchPosition.y,
-							 (torpedo.launchPosition.z + 6) * Math.cos(torpedo.startingAngle));
+							 (torpedo.launchPosition.z + 6) * Math.cos(-torpedo.startingAngle));
 
 			var p2 = new Position(torpedo.target.position.x,
 					 torpedo.target.position.y + 3,
 					 torpedo.target.position.z);
 
 			// calcular new position
-			var newPos = this.bezier3(p0, 
+			var newPos = this.bezier3(p0,
 						p1,
 			 			p2,
 			 			torpedo.target.position,
@@ -300,23 +317,23 @@ LightingScene.prototype.moveTorpedoes = function(){
 							p0,
 							p2,
 							torpedo.target.position) * Math.PI/2;
-			}	
-		}	
+			}
+		}
 	}
 }
 
 
 // Launch torpedo
 LightingScene.prototype.launchTorpedo = function() {
-	// create torpedo 
-	var torpedo = new MyTorpedo(this, 
-					this.submarineX, 
-					this.submarineY-0.9, 
-					this.submarineZ, 
+	// create torpedo
+	var torpedo = new MyTorpedo(this,
+					this.submarineX,
+					this.submarineY-0.9,
+					this.submarineZ,
 					this.submarineAngle,
 					this.targets[0]);
-	
-	// lock target torpedo to target 
+
+	// lock target torpedo to target
 	this.targets[0].locked = true;
 
 	// add torpedo
@@ -343,24 +360,24 @@ LightingScene.prototype.bezier = function(p0, p1, p2, p3, dest) {
 	 var cZ = 3 * (p1.z - p0.z),
       bZ = 3 * (p2.z - p1.z) - cZ,
       aZ = p3.z - p0.z - cZ - bZ;
-       
+
   dest.x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
   dest.y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
   dest.z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + p0.z;
 };
 
 LightingScene.prototype.bezier3 = function(a, b, c, d, t, dst){
-        dst.x = 
+        dst.x =
             a.x*(1-t)*(1-t)*(1-t)+
             b.x*3*t*(1-t)*(1-t)+
             c.x*3*t*t*(1-t)+
             d.x*t*t*t;
-        dst.y = 
+        dst.y =
             a.y*(1-t)*(1-t)*(1-t)+
             b.y*3*t*(1-t)*(1-t)+
             c.y*3*t*t*(1-t)+
             d.y*t*t*t;
-        dst.z = 
+        dst.z =
             a.z*(1-t)*(1-t)*(1-t)+
             b.z*3*t*(1-t)*(1-t)+
             c.z*3*t*t*(1-t)+
@@ -380,5 +397,3 @@ LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3){
 	//console.log(result);
 	return result;
 }
-
-

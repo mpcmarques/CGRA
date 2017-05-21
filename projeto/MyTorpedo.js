@@ -23,20 +23,6 @@
 
 	// trapezoids
 	this.trapezoid = new MyTrapezoid(this.scene);
-
-	// appearance
-	this.metalAppearance = new CGFappearance(scene);
-	this.metalAppearance.loadTexture("../resources/images/metal.jpg");
-	this.metalAppearance.setDiffuse(1,1,1,1);
-	this.metalAppearance.setSpecular(0.2,0.2,0.2,1);
-	this.metalAppearance.setShininess(50);
-
-	this.blueMetalAppearance = new CGFappearance(scene);
-	this.blueMetalAppearance.loadTexture("../resources/images/metal.jpg");
-	this.blueMetalAppearance.setAmbient(0.4,0.4,0.4,1);
-	this.blueMetalAppearance.setDiffuse(0,0,1,1);
-	this.blueMetalAppearance.setSpecular(0,0,1,1);
-	this.blueMetalAppearance.setShininess(50);
 	
  };
 
@@ -49,7 +35,7 @@
  		this.scene.translate(this.position.x,this.position.y,this.position.z);
  		this.scene.rotate(this.angle, 0,1,0);
  		this.scene.rotate(this.inclination,1,0,0);
- 		this.metalAppearance.apply();
+ 		this.scene.metalAppearance.apply();
 
      //	Body
 	this.scene.pushMatrix();
@@ -72,7 +58,7 @@
 		this.scene.translate(0, 0, +0.30);
 		this.scene.rotate(Math.PI,0,0,1);
 		this.scene.scale(0.15,0.15,0.5);
-		this.blueMetalAppearance.apply();
+		this.scene.blueMetalAppearance.apply();
 	   this.cover.display();
 	this.scene.popMatrix();
 
@@ -81,7 +67,7 @@
 		this.scene.translate( 0, 0, -0.55);
 		this.scene.rotate(-Math.PI/2,0,1,0);
 		this.scene.scale(0.5,0.3,0.4);
-		this.blueMetalAppearance.apply();
+		this.scene.blueMetalAppearance.apply();
 		this.trapezoid.display();
 	this.scene.popMatrix();
 

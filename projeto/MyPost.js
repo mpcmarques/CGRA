@@ -18,9 +18,8 @@
 	this.woodAppearance = new CGFappearance(scene);
 	this.woodAppearance.loadTexture("../resources/images/wood.jpg");
 	//this.woodAppearance.setTextureWrap('REPEAT','REPEAT');
-	this.woodAppearance.setAmbient(0.3,0.3,0.3,1);
 	this.woodAppearance.setDiffuse(0.9,0.9,0.9,1);
-	this.woodAppearance.setSpecular(0.1,0.1,0.1,1);	
+	this.woodAppearance.setSpecular(0.1,0.1,0.1,1);
 	this.woodAppearance.setShininess(10);
  };
 

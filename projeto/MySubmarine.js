@@ -6,7 +6,7 @@
 function MySubmarine(scene) {
 	CGFobject.call(this,scene);
 	//Alterar um bocado o circle e a halfsphere por causa da taxa de copianço!!!
-	
+
 	//	Cilindro Principal
 	this.body = new MyCilinder(this.scene,20,1);
 	//  Ponta Inicial
@@ -24,9 +24,9 @@ function MySubmarine(scene) {
 	//	Periscópio horizontal
 	this.periscopio2 = new  MyCilinder(this.scene,20,1);
 
-	//	Helice esquerda (a q se vê) 
+	//	Helice esquerda (a q se vê)
  	this.helice1 = new  MyCilinder(this.scene,20,1);
- 	//	HeliceIN esquerda (a q se vê) 
+ 	//	HeliceIN esquerda (a q se vê)
  	this.heliceIN1 = new  MyCilinderIN(this.scene,20,1);
 	//	Helice direita
 	this.helice2 = new  MyCilinder(this.scene,20,1);
@@ -46,7 +46,7 @@ function MySubmarine(scene) {
 	this.asa1 = new MyTrapezoid(scene);
 	this.asa2 = new MyTrapezoid(scene);
 	this.asa3 = new MyTrapezoid(scene);
- 	 	
+
 };
 
 MySubmarine.prototype = Object.create(CGFobject.prototype);
@@ -54,7 +54,9 @@ MySubmarine.prototype.constructor=MySubmarine;
 
 MySubmarine.prototype.display = function () {
 	this.scene.pushMatrix();
+	this.scene.rotate(Math.PI, 0,1,0);
 	this.scene.translate(0,0,-2.5);
+	this.scene.metalAppearance.apply();
 
 	//	Cilindro Principal
 	this.scene.pushMatrix();
@@ -77,12 +79,12 @@ MySubmarine.prototype.display = function () {
 	this.scene.scale(0.73/2,1/2,0.46);
 	this.backedge.display();
 	this.scene.popMatrix();
-		
+
 	//	Cilindro de Cima
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,2.5);
 	this.scene.rotate(-(Math.PI/2),1,0,0);
-	this.scene.scale(0.73,0.88,1.07); //0.57 no eixo do zz nao era o suficiente para ligar o corpo	
+	this.scene.scale(0.73,0.88,1.07); //0.57 no eixo do zz nao era o suficiente para ligar o corpo
 	this.top.display();
 	this.scene.popMatrix();
 	//	Topo
@@ -97,63 +99,63 @@ MySubmarine.prototype.display = function () {
 	this.scene.pushMatrix();
 	this.scene.translate(0,1.07,2.7);
 	this.scene.rotate(-(Math.PI/2),1,0,0);
-	this.scene.scale(0.1,0.1,0.7); //0.57 no eixo do zz nao era o suficiente para ligar o corpo	
+	this.scene.scale(0.1,0.1,0.7); //0.57 no eixo do zz nao era o suficiente para ligar o corpo
 	this.top.display();
 	this.scene.popMatrix();
 	//	Periscópio horizontal
 	this.scene.pushMatrix();
 	this.scene.translate(0,1.77,2.65);
-	this.scene.scale(0.1,0.1,0.2); 
+	this.scene.scale(0.1,0.1,0.2);
 	this.helice2.display();
 	this.scene.popMatrix();
 
 	//	Helice esquerda (a q se vê)
 	this.scene.pushMatrix();
 	this.scene.translate(0.530,-0.25,0.46);
-	this.scene.scale(0.4,0.4,0.5); 
+	this.scene.scale(0.4,0.4,0.5);
 	this.helice1.display();
 	this.scene.popMatrix();
 	//	Helice direita
 	this.scene.pushMatrix();
 	this.scene.translate(-0.530,-0.25,0.46);
-	this.scene.scale(0.4,0.4,0.5); 
+	this.scene.scale(0.4,0.4,0.5);
 	this.helice2.display();
 	this.scene.popMatrix();
 	//	HeliceIN esquerda (a q se vê)
 	this.scene.pushMatrix();
 	this.scene.translate(0.530,-0.25,0.46);
-	this.scene.scale(0.39,0.39,0.5); 
+	this.scene.scale(0.39,0.39,0.5);
 	this.heliceIN1.display();
 	this.scene.popMatrix();
 	//	HeliceIN direita
 	this.scene.pushMatrix();
 	this.scene.translate(-0.530,-0.25,0.46);
-	this.scene.scale(0.39,0.39,0.5); 
+	this.scene.scale(0.39,0.39,0.5);
 	this.heliceIN2.display();
 	this.scene.popMatrix();
 
 	//	Ventoinha esquera
  	this.scene.pushMatrix();
 	this.scene.translate(0.530,-0.25,0.86);
-	this.scene.scale(0.1,0.34,0.1); 
+	this.scene.scale(0.1,0.34,0.1);
 	this.ventoinha1.display();
 	this.scene.popMatrix();
 	//	Ventoinha direita
 	this.scene.pushMatrix();
 	this.scene.translate(-0.530,-0.25,0.86);
-	this.scene.scale(0.1,0.34,0.1); 
+	this.scene.scale(0.1,0.34,0.1);
 	this.ventoinha2.display();
 	this.scene.popMatrix();
 	//	Centro esquerdo
 	this.scene.pushMatrix();
 	this.scene.translate(0.530,-0.25,0.91);
-	this.scene.scale(0.05,0.05,0.05); 
+	this.scene.scale(0.05,0.05,0.05);
 	this.centro1.display();
 	this.scene.popMatrix();
 	//	Centro direito
 	this.scene.pushMatrix();
 	this.scene.translate(-0.530,-0.25,0.91);
-	this.scene.scale(0.05,0.05,0.05); 
+	this.scene.scale(0.05,0.05,0.05);
 	this.centro2.display();
 	this.scene.popMatrix();
 
