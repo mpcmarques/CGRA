@@ -264,11 +264,11 @@ LightingScene.prototype.moveSubmarine = function(isForward, speed){
 	var deltaZ = Math.cos(-this.submarineAngle) * speed;
 
 	if(isForward == true){
-		this.submarineX += deltaX;
-		this.submarineZ += deltaZ;
-	} else {
 		this.submarineX -= deltaX;
 		this.submarineZ -= deltaZ;
+	} else {
+		this.submarineX += deltaX;
+		this.submarineZ += deltaZ;
 	}
 };
 
@@ -289,16 +289,16 @@ LightingScene.prototype.moveTorpedoes = function(){
 
 			// torpedo has a target
 			if( torpedo.target != null ){
-			// move torpedo next to target
+				// move torpedo next to target
 
-			// calculate coordinates
-			var p0 = new Position(torpedo.launchPosition.x, torpedo.launchPosition.y, torpedo.launchPosition.z);
+				// calculate coordinates
+				var p0 = new Position(torpedo.launchPosition.x, torpedo.launchPosition.y, torpedo.launchPosition.z);
 
-			var p1 = new Position((torpedo.launchPosition.x + 6) * Math.sin(torpedo.startingAngle),
+				var p1 = new Position((torpedo.launchPosition.x) * Math.sin(torpedo.startingAngle),
 							 torpedo.launchPosition.y,
-							 (torpedo.launchPosition.z + 6) * Math.cos(-torpedo.startingAngle));
+							 (torpedo.launchPosition.z) * Math.cos(-torpedo.startingAngle));
 
-			var p2 = new Position(torpedo.target.position.x,
+							 var p2 = new Position(torpedo.target.position.x,
 					 torpedo.target.position.y + 3,
 					 torpedo.target.position.z);
 
@@ -318,6 +318,20 @@ LightingScene.prototype.moveTorpedoes = function(){
 							p2,
 							torpedo.target.position) * Math.PI/2;
 			}
+			} else {
+				/*/ remove torpedo target
+				if (torpedo.target != null){
+					for (int i = 0; i < this.targets.lenght; i++){
+						if (this.targets[i].position.x == torpedo.position.target.x
+							&& this.targets[i].position.y == torpedo.position.target.y
+							&& this.targets[i].position.z == torpedo.position.target.z){
+							this.targets.splice(i,0);
+						}
+					}
+				}*/
+
+				// remove torpedo
+				this.torpedoes.splice(0,1);
 		}
 	}
 }
