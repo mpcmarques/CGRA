@@ -35,7 +35,7 @@ LightingScene.prototype.init = function(application) {
 	this.isClockPaused = false;
 	this.speed = 3;
 	this.currentSubmarineAppearance = 0;
-	this.submarineAppearanceList = {"Metal": 0, "Blue":1};
+	this.submarineAppearanceList = {"Metal": 0, "Blue":1, "Clean": 2};
 
 	/* SUBMARINE */
 	this.submarineX = 8;
@@ -90,13 +90,29 @@ LightingScene.prototype.init = function(application) {
 	this.metalAppearance.setShininess(100);
 
 	this.blueMetalAppearance = new CGFappearance(this);
-	this.blueMetalAppearance.loadTexture("../resources/images/galvanized_metal.jpg");
+	this.blueMetalAppearance.loadTexture("../resources/images/metal.jpg");
 	this.blueMetalAppearance.setDiffuse(0,0,1,1);
+	this.blueMetalAppearance.setAmbient(0,0,0,1);
 	this.blueMetalAppearance.setSpecular(0,0,1,1);
-	this.blueMetalAppearance.setShininess(50);
+	this.blueMetalAppearance.setShininess(100);
+
+	this.blueMetalAppearance = new CGFappearance(this);
+	this.blueMetalAppearance.loadTexture("../resources/images/metal.jpg");
+	this.blueMetalAppearance.setDiffuse(0,0,1,1);
+	this.blueMetalAppearance.setAmbient(0,0,0.4,1);
+	this.blueMetalAppearance.setSpecular(0,0,1,1);
+	this.blueMetalAppearance.setShininess(100);
+
+	this.cleanAppearance = new CGFappearance(this);
+	this.cleanAppearance.loadTexture("../resources/images/camo.jpg");
+	this.cleanAppearance.setTextureWrap();
+	this.cleanAppearance.setDiffuse(1,1,1,1);
+	this.cleanAppearance.setAmbient(0.2,0.2,0.2,1);
+	this.cleanAppearance.setSpecular(1,1,1,1);
+	this.cleanAppearance.setShininess(100);
 
 	// submarine appearances
-	this.submarineAppearances = [this.metalAppearance, this.blueMetalAppearance];
+	this.submarineAppearances = [this.metalAppearance, this.blueMetalAppearance, this.cleanAppearance];
 };
 
 LightingScene.prototype.initCameras = function() {
