@@ -159,7 +159,7 @@ LightingScene.prototype.initLights = function() {
 
 LightingScene.prototype.updateLights = function() {
 	for (i = 0; i < this.lights.length; i++)
-		this.lights[i].update();
+	this.lights[i].update();
 };
 
 
@@ -197,48 +197,48 @@ LightingScene.prototype.display = function() {
 
 	// submarine
 	this.pushMatrix();
-		this.translate(this.submarineX, this.submarineY, this.submarineZ);
-		this.rotate(this.submarineAngle,0,1,0);
-		this.greenAppearance.apply();
-		this.submarine.display();
+	this.translate(this.submarineX, this.submarineY, this.submarineZ);
+	this.rotate(this.submarineAngle,0,1,0);
+	this.greenAppearance.apply();
+	this.submarine.display();
 	this.popMatrix();
 
 	// plane
 	this.pushMatrix();
-		this.translate(5, 0, 5);
-		this.rotate(Math.PI/2, 1,0,0);
-		this.rotate(Math.PI,0,1,0);
-		this.scale(100,100,1);
-		// appearance
-		this.waterAppearance.apply();
-		this.plane.display();
+	this.translate(5, 0, 5);
+	this.rotate(Math.PI/2, 1,0,0);
+	this.rotate(Math.PI,0,1,0);
+	this.scale(100,100,1);
+	// appearance
+	this.waterAppearance.apply();
+	this.plane.display();
 	this.popMatrix();
 
 	// post
 	this.pushMatrix();
-		this.translate(8,0,0);
-		this.post.display();
+	this.translate(8,0,0);
+	this.post.display();
 	this.popMatrix();
 
 	// targets
 	for(var i = 0; i < this.targets.length; i++){
 		// target
 		this.pushMatrix();
-			this.targets[i].display();
+		this.targets[i].display();
 		this.popMatrix();
 	}
 
 	// torpedoes
 	for(var i = 0; i < this.torpedoes.length; i++){
 		this.pushMatrix();
-			this.torpedoes[i].display();
+		this.torpedoes[i].display();
 		this.popMatrix();
 	}
 
 	// explosions
 	for(var i = 0; i < this.explosions.length; i++){
 		this.pushMatrix();
-			this.explosions[i].display();
+		this.explosions[i].display();
 		this.popMatrix();
 	}
 	// ---- END Primitive drawing section
@@ -341,132 +341,144 @@ LightingScene.prototype.moveTorpedoes = function(){
 				var p0 = new Position(torpedo.launchPosition.x, torpedo.launchPosition.y, torpedo.launchPosition.z);
 
 				var p1 = new Position(
-							 torpedo.launchPosition.x + 6 * Math.sin(torpedo.startingAngle),
-							 torpedo.launchPosition.y,
-							 torpedo.launchPosition.z + 6 * Math.cos(-torpedo.startingAngle)
-						 );
+					torpedo.launchPosition.x + 6 * Math.sin(torpedo.startingAngle),
+					torpedo.launchPosition.y,
+					torpedo.launchPosition.z + 6 * Math.cos(-torpedo.startingAngle)
+				);
 
 				var p2 = new Position(torpedo.target.position.x,
-					 		torpedo.target.position.y + 3,
-					 		torpedo.target.position.z);
+					torpedo.target.position.y + 3,
+					torpedo.target.position.z);
 
-			// calcular new position
-			var oldPos = new Position(torpedo.position.x,
-												torpedo.position.y,
-												torpedo.position.z);
+					// calcular new position
+					var oldPos = new Position(torpedo.position.x,
+						torpedo.position.y,
+						torpedo.position.z);
 
-			var newPos = this.bezier(p0,
-						p1,
-			 			p2,
-			 			torpedo.target.position,
-			 			deltaT,
-			 			torpedo.position);
+						var newPos = this.bezier(p0,
+							p1,
+							p2,
+							torpedo.target.position,
+							deltaT,
+							torpedo.position);
 
 
-			//torpedo.inclination = this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
-			//torpedo.inclination = -this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
+							//torpedo.inclination = this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
+							//torpedo.inclination = -this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
 
-			//console.log(torpedo.y);
-			var deltaX = torpedo.position.x - oldPos.x;
-			var deltaY = torpedo.position.y - oldPos.y;
-			var deltaZ = torpedo.position.z - oldPos.z;
+							//console.log(torpedo.y);
+							var deltaX = torpedo.position.x - oldPos.x;
+							var deltaY = torpedo.position.y - oldPos.y;
+							var deltaZ = torpedo.position.z - oldPos.z;
 
-			//torpedo.inclination -= Math.atan2(deltaZ, deltaX);
-			//console.log(torpedo.inclination);
-			}
-			} else {
-				/*/ remove torpedo target
-				if (torpedo.target != null){
-					for (int i = 0; i < this.targets.lenght; i++){
-						if (this.targets[i].position.x == torpedo.position.target.x
-							&& this.targets[i].position.y == torpedo.position.target.y
-							&& this.targets[i].position.z == torpedo.position.target.z){
-							this.targets.splice(i,0);
+							//torpedo.inclination -= Math.atan2(deltaZ, deltaX);
+							if (torpedo.animationTime >= torpedo.durationTime){
+								console.log("terminou");
+
+								// add explosion
+								this.explosions.push(
+									new MyExplosion(this, torpedo.target.position.x,
+																	torpedo.target.position.y,
+																	torpedo.target.position.z)
+								);
+
+								// remove target
+								this.targets.splice(i,1);
+								// remove rocket
+								this.torpedoes.splice(i,1);
+							}
 						}
 					}
-				}*/
-				// add explosion
-				this.explosions.push(new MyExplosion(this, torpedo.position.x, torpedo.position.y, torpedo.position.z));
-
-				// remove torpedo
-				this.torpedoes.splice(0,1);
-		}
-	}
-}
+				}
+			}
 
 
-// Launch torpedo
-LightingScene.prototype.launchTorpedo = function() {
-	// create torpedo
-	var torpedo = new MyTorpedo(this,
-					this.submarineX,
-					this.submarineY-0.9,
-					this.submarineZ,
-					this.submarineAngle,
-					this.targets[0]);
+			// Launch torpedo
+			LightingScene.prototype.launchTorpedo = function() {
+				var target = null;
+				// find a not locked target
+				for(var i = 0; i < this.targets.length; i++){
 
-	// lock target torpedo to target
-	this.targets[0].locked = true;
+					if(this.targets[i].locked == false){
+						target = this.targets[i];
+						break;
+					}
+				}
 
-	// add torpedo
-	this.torpedoes.push(torpedo);
-};
+				// criar torpedo
+				if(target != null){
+
+					// create torpedo
+					var torpedo = new MyTorpedo(this,
+						this.submarineX,
+						this.submarineY-0.9,
+						this.submarineZ,
+						this.submarineAngle,
+						target);
+
+						// lock target torpedo to target
+						target.locked = true;
+
+						// add torpedo
+						this.torpedoes.push(torpedo);
+					}
+				};
 
 
-// Bezier
-LightingScene.prototype.bezier = function(p0, p1, p2, p3, t, dest) {
-	//var  P1 = pInicio;
-	//var  P2 = 6 UNIDADES DE DISTANCIA DA POSICAO INICIAL, FRENTE DO SUBMARINE
-	// 	P3 = 3 UNIDADES ACIMA DO ALVO, NA VERTICAL
-	// 	P4 = POSICAO DO ALVO
-	//console.log(t);
+				// Bezier
+				LightingScene.prototype.bezier = function(p0, p1, p2, p3, t, dest) {
+					//var  P1 = pInicio;
+					//var  P2 = 6 UNIDADES DE DISTANCIA DA POSICAO INICIAL, FRENTE DO SUBMARINE
+					// 	P3 = 3 UNIDADES ACIMA DO ALVO, NA VERTICAL
+					// 	P4 = POSICAO DO ALVO
+					//console.log(t);
 
-	var cX = 3 * (p1.x - p0.x),
-      bX = 3 * (p2.x - p1.x) - cX,
-      aX = p3.x - p0.x - cX - bX;
+					var cX = 3 * (p1.x - p0.x),
+					bX = 3 * (p2.x - p1.x) - cX,
+					aX = p3.x - p0.x - cX - bX;
 
-  var cY = 3 * (p1.y - p0.y),
-      bY = 3 * (p2.y - p1.y) - cY,
-      aY = p3.y - p0.y - cY - bY;
+					var cY = 3 * (p1.y - p0.y),
+					bY = 3 * (p2.y - p1.y) - cY,
+					aY = p3.y - p0.y - cY - bY;
 
-	 var cZ = 3 * (p1.z - p0.z),
-      bZ = 3 * (p2.z - p1.z) - cZ,
-      aZ = p3.z - p0.z - cZ - bZ;
+					var cZ = 3 * (p1.z - p0.z),
+					bZ = 3 * (p2.z - p1.z) - cZ,
+					aZ = p3.z - p0.z - cZ - bZ;
 
-	dest.inclination =
-  dest.x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
-  dest.y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
-  dest.z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + p0.z;
-};
+					dest.inclination =
+					dest.x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
+					dest.y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
+					dest.z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + p0.z;
+				};
 
-LightingScene.prototype.bezier3 = function(a, b, c, d, t, dst){
-        dst.x =
-            a.x*(1-t)*(1-t)*(1-t)+
-            b.x*3*t*(1-t)*(1-t)+
-            c.x*3*t*t*(1-t)+
-            d.x*t*t*t;
-        dst.y =
-            a.y*(1-t)*(1-t)*(1-t)+
-            b.y*3*t*(1-t)*(1-t)+
-            c.y*3*t*t*(1-t)+
-            d.y*t*t*t;
-        dst.z =
-            a.z*(1-t)*(1-t)*(1-t)+
-            b.z*3*t*(1-t)*(1-t)+
-            c.z*3*t*t*(1-t)+
-            d.z*t*t*t;
-};
+				LightingScene.prototype.bezier3 = function(a, b, c, d, t, dst){
+					dst.x =
+					a.x*(1-t)*(1-t)*(1-t)+
+					b.x*3*t*(1-t)*(1-t)+
+					c.x*3*t*t*(1-t)+
+					d.x*t*t*t;
+					dst.y =
+					a.y*(1-t)*(1-t)*(1-t)+
+					b.y*3*t*(1-t)*(1-t)+
+					c.y*3*t*t*(1-t)+
+					d.y*t*t*t;
+					dst.z =
+					a.z*(1-t)*(1-t)*(1-t)+
+					b.z*3*t*(1-t)*(1-t)+
+					c.z*3*t*t*(1-t)+
+					d.z*t*t*t;
+				};
 
-LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3){
-	var B0_dt = -3 * Math.pow((1-t),2);
-	var B1_dt = 3 * Math.pow((1-t),2) - 6 * t * (1-t);
-	var B2_dt = -3 * Math.pow(t,2) + 6 * t * (1-t);
-	var B3_dt = 3 * Math.pow(t,2);
+				LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3){
+					var B0_dt = -3 * Math.pow((1-t),2);
+					var B1_dt = 3 * Math.pow((1-t),2) - 6 * t * (1-t);
+					var B2_dt = -3 * Math.pow(t,2) + 6 * t * (1-t);
+					var B3_dt = 3 * Math.pow(t,2);
 
-	var px_dt = (B0_dt * startPos.x) + (B1_dt * p1.x) + (B2_dt * p2.x) + (B3_dt * p3.x);
-	var py_dt = (B0_dt * startPos.y) + (B1_dt * p1.y) + (B2_dt * p2.y) + (B3_dt * p3.y);
+					var px_dt = (B0_dt * startPos.x) + (B1_dt * p1.x) + (B2_dt * p2.x) + (B3_dt * p3.x);
+					var py_dt = (B0_dt * startPos.y) + (B1_dt * p1.y) + (B2_dt * p2.y) + (B3_dt * p3.y);
 
-	var result = Math.atan(py_dt, px_dt);
-	//console.log(result);
-	return result;
-}
+					var result = Math.atan(py_dt, px_dt);
+					//console.log(result);
+					return result;
+				}
