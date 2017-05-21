@@ -371,9 +371,8 @@ LightingScene.prototype.moveTorpedoes = function(){
 							var deltaY = torpedo.position.y - oldPos.y;
 							var deltaZ = torpedo.position.z - oldPos.z;
 
-							//torpedo.inclination -= Math.atan2(deltaZ, deltaX);
+							torpedo.inclination = Math.PI / 2  * deltaT;
 							if (torpedo.animationTime >= torpedo.durationTime){
-								console.log("terminou");
 
 								// add explosion
 								this.explosions.push(
