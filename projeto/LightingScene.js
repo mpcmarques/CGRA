@@ -64,6 +64,9 @@ LightingScene.prototype.init = function(application) {
 	this.targets[2] = new MyTarget(this, 4, 0.1, 12);
 	this.targets[3] = new MyTarget(this, 12, 0.1, 12);
 
+	// Explosions
+	this.explosions = [];
+
 	/* Appearances */
 
 	// default appearance
@@ -110,6 +113,13 @@ LightingScene.prototype.init = function(application) {
 	this.cleanAppearance.setAmbient(0.2,0.2,0.2,1);
 	this.cleanAppearance.setSpecular(1,1,1,1);
 	this.cleanAppearance.setShininess(100);
+
+	this.fireAppearance = new CGFappearance(this);
+	this.fireAppearance.loadTexture("../resources/images/fire.jpg");
+	this.fireAppearance.setTextureWrap();
+	this.fireAppearance.setSpecular(0.5,0,0,1);
+	this.fireAppearance.setAmbient(0.5,1,1,1);
+	this.fireAppearance.setShininess(100);
 
 	// submarine appearances
 	this.submarineAppearances = [this.metalAppearance, this.blueMetalAppearance, this.cleanAppearance];
@@ -224,6 +234,13 @@ LightingScene.prototype.display = function() {
 			this.torpedoes[i].display();
 		this.popMatrix();
 	}
+
+	// explosions
+	for(var i = 0; i < this.explosions.length; i++){
+		this.pushMatrix();
+			this.explosions[i].display();
+		this.popMatrix();
+	}
 	// ---- END Primitive drawing section
 };
 
@@ -260,6 +277,15 @@ LightingScene.prototype.update = function(currTime){
 
 	// move submarine
 	this.moveSubmarine(false, this.speed/100);
+
+	// update explosions
+	for (var i = 0; i < this.explosions.length; i++) {
+		if(this.explosions[i].leftTime <= 0){
+			this.explosions.splice(i, 1);
+		} else {
+			this.explosions[i].leftTime -= 1;
+		}
+	}
 }
 
 // Pause clock function
@@ -341,7 +367,11 @@ LightingScene.prototype.moveTorpedoes = function(){
 			//torpedo.inclination = -this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
 
 			//console.log(torpedo.y);
-			//torpedo.angle = this.bezier3Angle(deltaT,p0,p1,p2,torpedo.target.position);
+			var deltaX = torpedo.position.x - oldPos.x;
+			var deltaY = torpedo.position.y - oldPos.y;
+			var deltaZ = torpedo.position.z - oldPos.z;
+
+			//torpedo.inclination -= Math.atan2(deltaZ, deltaX);
 			//console.log(torpedo.inclination);
 			}
 			} else {
@@ -355,6 +385,8 @@ LightingScene.prototype.moveTorpedoes = function(){
 						}
 					}
 				}*/
+				// add explosion
+				this.explosions.push(new MyExplosion(this, torpedo.position.x, torpedo.position.y, torpedo.position.z));
 
 				// remove torpedo
 				this.torpedoes.splice(0,1);
