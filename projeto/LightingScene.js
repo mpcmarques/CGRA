@@ -258,7 +258,11 @@ LightingScene.prototype.moveTorpedoes = function(){
 			// move torpedo next to target
 
 			// calculate coordinates
-			var p0 = new Position(torpedo.position.x, torpedo.position.y, torpedo.position.z);
+			var p0 = new Position(torpedo.launchPosition.x, torpedo.launchPosition.y, torpedo.launchPosition.z);
+
+			var p1 = new Position((torpedo.launchPosition.x + 6) * Math.sin(torpedo.startingAngle),
+							 torpedo.launchPosition.y,
+							 (torpedo.launchPosition.z + 6) * Math.cos(torpedo.startingAngle));
 
 			var p2 = new Position(torpedo.target.position.x,
 					 torpedo.target.position.y + 3,
@@ -266,7 +270,7 @@ LightingScene.prototype.moveTorpedoes = function(){
 
 			// calcular new position
 			var newPos = this.bezier3(p0, 
-						p0,
+						p1,
 			 			p2,
 			 			torpedo.target.position,
 			 			deltaT,
@@ -278,7 +282,7 @@ LightingScene.prototype.moveTorpedoes = function(){
 							p0,
 							p0,
 							p2,
-							torpedo.target.position)
+							torpedo.target.position) * Math.PI/2;
 			}	
 		}	
 	}
@@ -356,7 +360,7 @@ LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3){
 	var py_dt = (B0_dt * startPos.y) + (B1_dt * p1.y) + (B2_dt * p2.y) + (B3_dt * p3.y);
 
 	var result = Math.atan(py_dt, px_dt);
-	console.log(result);
+	//console.log(result);
 	return result;
 }
 

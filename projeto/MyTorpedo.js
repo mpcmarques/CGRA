@@ -9,6 +9,8 @@
  	this.position = new Position(x,y,z);
  	this.angle = angle;
  	this.target = target;
+ 	this.launchPosition = new Position(x,y,z);
+ 	this.startingAngle = angle;
  	this.durationTime = Math.sqrt(Math.pow(this.position.x - this.target.position.x,2) + Math.pow(this.position.y - this.target.position.y,2) + Math.pow(this.position.z - this.target.position.z,2));
 	this.animationTime = 0;
 	this.inclination = 0;
