@@ -256,30 +256,29 @@ LightingScene.prototype.moveTorpedoes = function(){
 			// torpedo has a target
 			if( torpedo.target != null ){
 			// move torpedo next to target
-			
-			// calculate p1
-			var p1 = new Position(torpedo.position.x,
-							torpedo.position.y,
-							torpedo.position.z);
 
-			// calculate p2
+			// calculate coordinates
+			var p0 = new Position(torpedo.position.x, torpedo.position.y, torpedo.position.z);
+
 			var p2 = new Position(torpedo.target.position.x,
 					 torpedo.target.position.y + 3,
 					 torpedo.target.position.z);
 
-			var newPos = this.bezier(torpedo.position, 
-						p1,
+			// calcular new position
+			var newPos = this.bezier3(p0, 
+						p0,
 			 			p2,
 			 			torpedo.target.position,
-			 			deltaT);
+			 			deltaT,
+			 			torpedo.position);
 
-			 // update torpedo position
-			torpedo.position.x = newPos.x;
-			torpedo.position.y = newPos.y;
-			torpedo.position.z = newPos.z;
 
 			//console.log(torpedo.y);
-			torpedo.inclination = (Math.PI/2) * deltaT;
+			torpedo.inclination = -this.bezier3Angle(deltaT,
+							p0,
+							p0,
+							p2,
+							torpedo.target.position)
 			}	
 		}	
 	}
@@ -305,7 +304,7 @@ LightingScene.prototype.launchTorpedo = function() {
 
 
 // Bezier
-LightingScene.prototype.bezier = function(p0, p1, p2, p3, t) {
+LightingScene.prototype.bezier = function(p0, p1, p2, p3, dest) {
 	//var  P1 = pInicio;
 	//var  P2 = 6 UNIDADES DE DISTANCIA DA POSICAO INICIAL, FRENTE DO SUBMARINE
 	// 	P3 = 3 UNIDADES ACIMA DO ALVO, NA VERTICAL
@@ -324,10 +323,41 @@ LightingScene.prototype.bezier = function(p0, p1, p2, p3, t) {
       bZ = 3 * (p2.z - p1.z) - cZ,
       aZ = p3.z - p0.z - cZ - bZ;
        
-  var x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
-  var y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
-	var z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + p0.z;
-	
-  return {x: x, y: y, z: z};
+  dest.x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
+  dest.y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
+  dest.z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + p0.z;
 };
+
+LightingScene.prototype.bezier3 = function(a, b, c, d, t, dst){
+        dst.x = 
+            a.x*(1-t)*(1-t)*(1-t)+
+            b.x*3*t*(1-t)*(1-t)+
+            c.x*3*t*t*(1-t)+
+            d.x*t*t*t;
+        dst.y = 
+            a.y*(1-t)*(1-t)*(1-t)+
+            b.y*3*t*(1-t)*(1-t)+
+            c.y*3*t*t*(1-t)+
+            d.y*t*t*t;
+        dst.z = 
+            a.z*(1-t)*(1-t)*(1-t)+
+            b.z*3*t*(1-t)*(1-t)+
+            c.z*3*t*t*(1-t)+
+            d.z*t*t*t;
+};
+
+LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3){
+	var B0_dt = -3 * Math.pow((1-t),2);
+	var B1_dt = 3 * Math.pow((1-t),2) - 6 * t * (1-t);
+	var B2_dt = -3 * Math.pow(t,2) + 6 * t * (1-t);
+	var B3_dt = 3 * Math.pow(t,2);
+
+	var px_dt = (B0_dt * startPos.x) + (B1_dt * p1.x) + (B2_dt * p2.x) + (B3_dt * p3.x);
+	var py_dt = (B0_dt * startPos.y) + (B1_dt * p1.y) + (B2_dt * p2.y) + (B3_dt * p3.y);
+
+	var result = Math.atan(py_dt, px_dt);
+	console.log(result);
+	return result;
+}
+
 
