@@ -33,8 +33,9 @@ MyInterface.prototype.init = function(application) {
 	// add two check boxes to the group. The identifiers must be members variables of the scene initialized in scene.init as boolean
 	// e.g. this.option1=true; this.option2=false;
 	
-	group.add(this.scene, 'light1');
-	group.add(this.scene, 'light2');
+	group.add(this.scene, 'globalLight');
+	group.add(this.scene, 'blueLight');
+	group.add(this.scene, 'clockLight');
 
 	this.gui.add(this.scene, 'pauseClock');
 	

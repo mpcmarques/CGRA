@@ -29,8 +29,9 @@ LightingScene.prototype.init = function(application) {
 	this.setUpdatePeriod(1);
 
 	// interface
-	this.light1 = true;
-	this.light2 = true;
+	this.globalLight = true;
+	this.blueLight = true;
+	this.clockLight = false;
 	this.isClockPaused = false;
 	this.speed = 3;
 
@@ -56,8 +57,10 @@ LightingScene.prototype.init = function(application) {
 
 	// Targets
 	this.targets = [];
-	this.targets[0] = new MyTarget(this, 3, 0.1, 5);
-	this.targets[1] = new MyTarget(this, 10, 0.1, 5);
+	this.targets[0] = new MyTarget(this, 4, 0.1, 4);
+	this.targets[1] = new MyTarget(this, 12, 0.1, 4);
+	this.targets[2] = new MyTarget(this, 4, 0.1, 12);
+	this.targets[3] = new MyTarget(this, 12, 0.1, 12);
 
 	/* Appearances */
 
@@ -86,21 +89,29 @@ LightingScene.prototype.initLights = function() {
 	this.setGlobalAmbientLight(0.4,0.4,0.4, 1.0);
 	
 	// Positions for light
-	this.lights[0].setPosition(5, 10, 5, 1);
-	this.lights[1].setPosition(0, 3, 0, 1);
+	this.lights[0].setPosition(8, 15, 8, 1);
+	this.lights[1].setPosition(8, 3, 8, 1);
+	this.lights[2].setPosition(8,6,1,1);
 
 
 	// light 0
 	this.lights[0].setSpecular(1,1,1,1);
 	this.lights[0].setDiffuse(1,1,1,1);
-	this.lights[0].setConstantAttenuation(3);
+	this.lights[0].setConstantAttenuation(1);
 	
 	
 	// light 1
-	this.lights[1].setSpecular(30/255,144/255,1);
-	this.lights[1].setDiffuse(30/255,144/255,1);
-	this.lights[1].setSpotDirection(5,0,5);
+	this.lights[1].setSpecular(30/255,144/255,1,1);
+	this.lights[1].setDiffuse(30/255,144/255,1,1);
+	this.lights[0].setConstantAttenuation(5);
+
+	// light 2
+	this.lights[2].setSpecular(1,1,0,1);
+	this.lights[2].setDiffuse(1,1,0,1);
+	this.lights[2].setQuadraticAttenuation(1);
 };
+
+
 
 LightingScene.prototype.updateLights = function() {
 	for (i = 0; i < this.lights.length; i++)
@@ -192,16 +203,22 @@ LightingScene.prototype.update = function(currTime){
 	
 
 	// update gui options
-	if(this.light1  == true){
+	if(this.globalLight  == true){
 		this.lights[0].enable();	
 	} else {
 		this.lights[0].disable();
 	}
 
-	if (this.light2 == true){
+	if (this.blueLight == true){
 		this.lights[1].enable();
 	} else {
 		this.lights[1].disable();
+	}
+
+	if (this.clockLight == true){
+		this.lights[2].enable();
+	} else {
+		this.lights[2].disable();
 	}
 
 	// move torpedoes
