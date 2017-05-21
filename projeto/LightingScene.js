@@ -244,8 +244,10 @@ LightingScene.prototype.moveTorpedoes = function(){
 
 	for(var i = 0; i < this.torpedoes.length; i++){
 		var torpedo = this.torpedoes[i];
+	
 		// update torpedo
 		if (torpedo.animationTime <= torpedo.durationTime){
+
 			torpedo.animationTime += 1/100;
 
 			var deltaT = torpedo.animationTime / torpedo.durationTime;
@@ -254,22 +256,30 @@ LightingScene.prototype.moveTorpedoes = function(){
 			// torpedo has a target
 			if( torpedo.target != null ){
 			// move torpedo next to target
-			torpedo.x = this.bezier(torpedo.x, 
-						torpedo.x,
-			 			torpedo.target.x,
-			 			torpedo.target.x,
+			
+			// calculate p1
+			var p1 = new Position(torpedo.position.x,
+							torpedo.position.y,
+							torpedo.position.z);
+
+			// calculate p2
+			var p2 = new Position(torpedo.target.position.x,
+					 torpedo.target.position.y + 3,
+					 torpedo.target.position.z);
+
+			var newPos = this.bezier(torpedo.position, 
+						p1,
+			 			p2,
+			 			torpedo.target.position,
 			 			deltaT);
-			torpedo.y = this.bezier(torpedo.y, 
-						torpedo.y,
-			 			torpedo.target.y,
-			 			torpedo.target.y,
-			 			deltaT);
-			 torpedo.z = this.bezier(torpedo.z, 
-						torpedo.z,
-			 			torpedo.target.z,
-			 			torpedo.target.z,
-			 			deltaT);
+
+			 // update torpedo position
+			torpedo.position.x = newPos.x;
+			torpedo.position.y = newPos.y;
+			torpedo.position.z = newPos.z;
+
 			//console.log(torpedo.y);
+			torpedo.inclination = (Math.PI/2) * deltaT;
 			}	
 		}	
 	}
@@ -281,7 +291,7 @@ LightingScene.prototype.launchTorpedo = function() {
 	// create torpedo 
 	var torpedo = new MyTorpedo(this, 
 					this.submarineX, 
-					this.submarineY-1, 
+					this.submarineY-0.9, 
 					this.submarineZ, 
 					this.submarineAngle,
 					this.targets[0]);
@@ -295,17 +305,29 @@ LightingScene.prototype.launchTorpedo = function() {
 
 
 // Bezier
-LightingScene.prototype.bezier = function(P1, P2, P3, P4, t) {
+LightingScene.prototype.bezier = function(p0, p1, p2, p3, t) {
 	//var  P1 = pInicio;
 	//var  P2 = 6 UNIDADES DE DISTANCIA DA POSICAO INICIAL, FRENTE DO SUBMARINE
 	// 	P3 = 3 UNIDADES ACIMA DO ALVO, NA VERTICAL
 	// 	P4 = POSICAO DO ALVO
+	//console.log(t);
 
-	var qT = Math.pow((1 - t),3) * P1 
-	+ 3 * t * Math.pow((1 - t),2) * P2 
-	+ 3 * Math.pow(t,2) * (1 - t) * P3 
-	+ Math.pow(t,3) * P4;
-		
-	return qT;
+	var cX = 3 * (p1.x - p0.x),
+      bX = 3 * (p2.x - p1.x) - cX,
+      aX = p3.x - p0.x - cX - bX;
+
+  var cY = 3 * (p1.y - p0.y),
+      bY = 3 * (p2.y - p1.y) - cY,
+      aY = p3.y - p0.y - cY - bY;
+
+	 var cZ = 3 * (p1.z - p0.z),
+      bZ = 3 * (p2.z - p1.z) - cZ,
+      aZ = p3.z - p0.z - cZ - bZ;
+       
+  var x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
+  var y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
+	var z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + p0.z;
+	
+  return {x: x, y: y, z: z};
 };
 

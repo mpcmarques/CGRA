@@ -53,13 +53,16 @@ MySubmarine.prototype = Object.create(CGFobject.prototype);
 MySubmarine.prototype.constructor=MySubmarine;
 
 MySubmarine.prototype.display = function () {
+	this.scene.pushMatrix();
+	this.scene.translate(0,0,-2.5);
+
 	//	Cilindro Principal
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,0.46);
 	this.scene.scale(0.73,1,4.08);
 	this.body.display();
 	this.scene.popMatrix();
-	
+
 	//  Ponta Inicial
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,4.54);
@@ -171,5 +174,7 @@ MySubmarine.prototype.display = function () {
 	this.scene.rotate(Math.PI/2,0,1,0);
 	this.scene.scale(0.68,1,1);
 	this.asa3.display();
+	this.scene.popMatrix();
+
 	this.scene.popMatrix();
 };

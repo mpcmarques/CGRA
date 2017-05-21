@@ -7,9 +7,7 @@
  	CGFobject.call(this,scene);
 
  	// setup
- 	this.x = x;
- 	this.y = y;
- 	this.z = z;
+ 	this.position = new Position(x,y,z);
  	this.locked = false;
 
 	//body
@@ -31,7 +29,7 @@
  MyTarget.prototype.display = function() {
      //	MARK: Body
 	this.scene.pushMatrix();
-		this.scene.translate(this.x,this.y,this.z);
+		this.scene.translate(this.position.x,this.position.y,this.position.z);
 		this.scene.rotate(-Math.PI/2, 1,0,0);
 		// apply appearance
 		this.targetAppearance.apply();

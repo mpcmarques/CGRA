@@ -6,12 +6,10 @@
  function MyTorpedo(scene, x, y, z, angle, target) {
  	CGFobject.call(this,scene);
 
- 	this.x = x;
- 	this.y = y;
- 	this.z = z;
+ 	this.position = new Position(x,y,z);
  	this.angle = angle;
  	this.target = target;
- 	this.durationTime = Math.sqrt(Math.pow(this.x - this.target.x,2) + Math.pow(this.y - this.target.y,2) + Math.pow(this.z - this.target.z,2));
+ 	this.durationTime = Math.sqrt(Math.pow(this.position.x - this.target.position.x,2) + Math.pow(this.position.y - this.target.position.y,2) + Math.pow(this.position.z - this.target.position.z,2));
 	this.animationTime = 0;
 	this.inclination = 0;
 
@@ -46,7 +44,7 @@
 
  MyTorpedo.prototype.display = function() {
 	this.scene.pushMatrix();
- 		this.scene.translate(this.x,this.y,this.z);
+ 		this.scene.translate(this.position.x,this.position.y,this.position.z);
  		this.scene.rotate(this.angle, 0,1,0);
  		this.scene.rotate(this.inclination,1,0,0);
  		this.metalAppearance.apply();

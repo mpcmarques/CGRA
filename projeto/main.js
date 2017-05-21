@@ -23,6 +23,7 @@ serialInclude([
 	'MyHalfSphere.js',
 	'MyCircle.js',
 	'MyCilinderIN.js',
+	'Position.js',
 
 	main=function() {
 		var app = new CGFapplication(document.body);
