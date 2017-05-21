@@ -23,7 +23,7 @@
 
 	// trapezoids
 	this.trapezoid = new MyTrapezoid(this.scene);
-	
+
  };
 
  MyTorpedo.prototype = Object.create(CGFobject.prototype);

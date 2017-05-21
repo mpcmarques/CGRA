@@ -300,7 +300,7 @@ LightingScene.prototype.moveTorpedoes = function(){
 		var torpedo = this.torpedoes[i];
 
 		// update torpedo
-		if (torpedo.animationTime <= torpedo.durationTime){
+		if (torpedo.animationTime < torpedo.durationTime){
 
 			torpedo.animationTime += 1/100;
 
@@ -314,20 +314,22 @@ LightingScene.prototype.moveTorpedoes = function(){
 				// calculate coordinates
 				var p0 = new Position(torpedo.launchPosition.x, torpedo.launchPosition.y, torpedo.launchPosition.z);
 
-				var p1 = new Position((torpedo.launchPosition.x) * Math.sin(torpedo.startingAngle),
+				var p1 = new Position(
+							 torpedo.launchPosition.x + 6 * Math.sin(torpedo.startingAngle),
 							 torpedo.launchPosition.y,
-							 (torpedo.launchPosition.z) * Math.cos(-torpedo.startingAngle));
+							 torpedo.launchPosition.z + 6 * Math.cos(-torpedo.startingAngle)
+						 );
 
-							 var p2 = new Position(torpedo.target.position.x,
-					 torpedo.target.position.y + 3,
-					 torpedo.target.position.z);
+				var p2 = new Position(torpedo.target.position.x,
+					 		torpedo.target.position.y + 3,
+					 		torpedo.target.position.z);
 
 			// calcular new position
 			var oldPos = new Position(torpedo.position.x,
 												torpedo.position.y,
 												torpedo.position.z);
 
-			var newPos = this.bezier3(p0,
+			var newPos = this.bezier(p0,
 						p1,
 			 			p2,
 			 			torpedo.target.position,
@@ -335,8 +337,12 @@ LightingScene.prototype.moveTorpedoes = function(){
 			 			torpedo.position);
 
 
+			//torpedo.inclination = this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
+			//torpedo.inclination = -this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
+
 			//console.log(torpedo.y);
-			//torpedo.inclination = (torpedo.position.y - oldPos.y) / deltaT;
+			//torpedo.angle = this.bezier3Angle(deltaT,p0,p1,p2,torpedo.target.position);
+			//console.log(torpedo.inclination);
 			}
 			} else {
 				/*/ remove torpedo target
@@ -376,7 +382,7 @@ LightingScene.prototype.launchTorpedo = function() {
 
 
 // Bezier
-LightingScene.prototype.bezier = function(p0, p1, p2, p3, dest) {
+LightingScene.prototype.bezier = function(p0, p1, p2, p3, t, dest) {
 	//var  P1 = pInicio;
 	//var  P2 = 6 UNIDADES DE DISTANCIA DA POSICAO INICIAL, FRENTE DO SUBMARINE
 	// 	P3 = 3 UNIDADES ACIMA DO ALVO, NA VERTICAL
