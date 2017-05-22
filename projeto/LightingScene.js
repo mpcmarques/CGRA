@@ -482,7 +482,9 @@ for(var i = 0; i < this.torpedoes.length; i++){
 				var dy = torpedo.position.y - oldPos.y;
 				var dz = torpedo.position.z - oldPos.z;
 
-				torpedo.angle =  Math.atan2(dx, dz);
+				//torpedo.angle =  Math.atan2(dx, dz);
+				torpedo.inclinationX = Math.atan2(dy,dx);
+				torpedo.inclinationZ = Math.atan2(dy,dx);
 			};
 
 			LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3){

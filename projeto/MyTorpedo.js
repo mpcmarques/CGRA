@@ -14,7 +14,8 @@
  	this.durationTime = Math.sqrt(Math.pow(this.position.x - this.target.position.x,2) + Math.pow(this.position.y - this.target.position.y,2) + Math.pow(this.position.z - this.target.position.z,2));
 	this.animationTime = 0;
   this.arrived = false;
-	this.inclination = 0;
+	this.inclinationX = 0;
+  this.inclinationZ = 0;
 
 	//body
 	this.body = new MyCilinder(this.scene, 12, 1);
@@ -34,7 +35,8 @@
  MyTorpedo.prototype.display = function() {
 	this.scene.pushMatrix();
  		this.scene.translate(this.position.x,this.position.y,this.position.z);
-    this.scene.rotate(this.inclination, 1,0,1);
+    this.scene.rotate(this.inclinationX, 1,0,0);
+    this.scene.rotate(this.inclinationZ, 0,0,1);
     this.scene.rotate(this.angle, 0,1,0);
  		this.scene.metalAppearance.apply();
 
