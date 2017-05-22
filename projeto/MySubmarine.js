@@ -23,6 +23,8 @@ function MySubmarine(scene) {
 	this.periscopio1 = new  MyCilinder(this.scene,20,1);
 	//	Periscópio horizontal
 	this.periscopio2 = new  MyCilinder(this.scene,20,1);
+	this.z1 = 1.07;
+	this.z2 = 1.77;
 
 	//	Helice esquerda (a q se vê)
  	this.helice1 = new  MyCilinder(this.scene,20,1);
@@ -34,9 +36,10 @@ function MySubmarine(scene) {
  	this.heliceIN2 = new  MyCilinderIN(this.scene,20,1);
 
  	//	Ventoinha esquera
- 	this.ventoinha1 = new MyUnitCubeQuad(this.scene);
+ 	this.ventoinha1 = new MyVentoinha(this.scene);
 	//	Ventoinha direita
-	this.ventoinha2 = new MyUnitCubeQuad(this.scene);
+	this.ventoinha2 = new MyVentoinha(this.scene);
+	this.angle = 0;
 	//	Centro esquerdo
 	this.centro1 = new MyHalfSphere(this.scene,20,20);
 	//	Centro direito
@@ -55,7 +58,6 @@ MySubmarine.prototype.constructor=MySubmarine;
 MySubmarine.prototype.display = function () {
 	this.scene.pushMatrix();
 	this.scene.translate(0,0,-2.5);
-	//console.log(this.scene.currentSubmarineAppearance);
 	this.scene.submarineAppearances[this.scene.currentSubmarineAppearance].apply();
 
 	//	Cilindro Principal
@@ -97,16 +99,16 @@ MySubmarine.prototype.display = function () {
 
 	//	Periscópio vertical
 	this.scene.pushMatrix();
-	this.scene.translate(0,1.07,2.7);
+	this.scene.translate(0,this.z1+this.scene.posPeri,2.7);
 	this.scene.rotate(-(Math.PI/2),1,0,0);
 	this.scene.scale(0.1,0.1,0.7); //0.57 no eixo do zz nao era o suficiente para ligar o corpo
-	this.top.display();
+	this.periscopio1.display();
 	this.scene.popMatrix();
 	//	Periscópio horizontal
 	this.scene.pushMatrix();
-	this.scene.translate(0,1.77,2.65);
+	this.scene.translate(0,this.z2+this.scene.posPeri,2.65);
 	this.scene.scale(0.1,0.1,0.2);
-	this.helice2.display();
+	this.periscopio2.display();
 	this.scene.popMatrix();
 
 	//	Helice esquerda (a q se vê)
@@ -137,15 +139,16 @@ MySubmarine.prototype.display = function () {
 	//	Ventoinha esquera
  	this.scene.pushMatrix();
 	this.scene.translate(0.530,-0.25,0.86);
-	this.scene.scale(0.1,0.34,0.1);
+	this.scene.rotate(this.angle,0,0,1);
 	this.ventoinha1.display();
 	this.scene.popMatrix();
 	//	Ventoinha direita
 	this.scene.pushMatrix();
 	this.scene.translate(-0.530,-0.25,0.86);
-	this.scene.scale(0.1,0.34,0.1);
+	this.scene.rotate(this.angle,0,0,1);
 	this.ventoinha2.display();
 	this.scene.popMatrix();
+
 	//	Centro esquerdo
 	this.scene.pushMatrix();
 	this.scene.translate(0.530,-0.25,0.91);
@@ -167,6 +170,9 @@ MySubmarine.prototype.display = function () {
 	//	asa2
 	this.scene.pushMatrix();
 	this.scene.rotate(Math.PI/2,0,0,1);
+	this.scene.translate(0,0,0.3);
+	this.scene.rotate(this.scene.trapezoidAngle,1,0,0);
+	this.scene.translate(0,0,-0.3);
 	this.scene.rotate(-Math.PI/2,0,1,0);
 	this.asa2.display();
 	this.scene.popMatrix();
@@ -180,3 +186,11 @@ MySubmarine.prototype.display = function () {
 
 	this.scene.popMatrix();
 };
+
+MySubmarine.prototype.update = function(){
+
+ 	//	update ventoinha
+ 	this.asa2.angle += 0.01*this.scene.trapezoidAngle;
+ 	this.ventoinha1.angle -= 0.01*this.scene.speed;
+ 	this.ventoinha2.angle += 0.01*this.scene.speed;
+ }

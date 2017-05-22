@@ -25,6 +25,7 @@ serialInclude([
 	'MyCilinderIN.js',
 	'Position.js',
 	'MyExplosion.js',
+	'MyVentoinha.js',
 
 	main=function() {
 		var app = new CGFapplication(document.body);

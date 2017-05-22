@@ -2,9 +2,7 @@
  * MyInterface
  * @constructor
  */
-
-
-function MyInterface() {
+function MyInterface () {
 	//call CGFinterface constructor
 	CGFinterface.call(this);
 };
@@ -67,10 +65,14 @@ MyInterface.prototype.processKeyboard = function(event) {
 	switch (event.keyCode)
 	{
 		case (65):	// only works for capital 'A', as it is
-			this.scene.rotateSubmarine(Math.PI/6);
+			this.scene.rotateSubmarine(Math.PI/40);
+			if (this.scene.trapezoidAngle > -1.15)
+				this.scene.rotateTrapezoid(-Math.PI/40);
 		break;
 		case (68): // capital 'D';
-			this.scene.rotateSubmarine(-Math.PI/6);
+			this.scene.rotateSubmarine(-Math.PI/40);
+			if (this.scene.trapezoidAngle < 1.15)
+				this.scene.rotateTrapezoid(Math.PI/40);
 		break;
 		case (87):	// capital 'W';
 			this.scene.speed += 1;
@@ -80,6 +82,22 @@ MyInterface.prototype.processKeyboard = function(event) {
 		break;
 		case (70): // capital 'F';
 			this.scene.launchTorpedo();
+		break;
+		case (81): // capital 'Q';
+		if(this.scene.submarineY > 0){
+			this.scene.submarineY -= 0.1;
+		}
+		break;
+		case (69): // capital 'E';
+			this.scene.submarineY += 0.1;
+		break;
+		case (80): // capital 'P';
+			if(this.scene.posPeri < -0.1)
+				this.scene.movePeri(0.1);
+		break;
+		case (76): // capital 'L';
+			if(this.scene.posPeri > -0.6)
+				this.scene.movePeri(-0.1);
 		break;
 	};
 };

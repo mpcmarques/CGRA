@@ -34,8 +34,8 @@
  MyTorpedo.prototype.display = function() {
 	this.scene.pushMatrix();
  		this.scene.translate(this.position.x,this.position.y,this.position.z);
- 		this.scene.rotate(this.angle, 0,1,0);
- 		this.scene.rotate(this.inclination,1,0,0);
+    this.scene.rotate(this.inclination, 1,0,1);
+    this.scene.rotate(this.angle, 0,1,0);
  		this.scene.metalAppearance.apply();
 
      //	Body
