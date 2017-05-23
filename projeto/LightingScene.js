@@ -369,7 +369,7 @@ for(var i = 0; i < this.torpedoes.length; i++){
 
 						//torpedo.inclination = this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
 						//torpedo.angle = this.bezier3Angle(deltaT, p0, p1, p2, torpedo.target.position);
-						this.updateTorpedoDirection(torpedo, oldPos);
+            this.updateTorpedoDirection(torpedo, oldPos, deltaT);
 
 						// TORPEDO LOGIC
 						if (torpedo.animationTime >= torpedo.durationTime){
@@ -477,17 +477,25 @@ for(var i = 0; i < this.torpedoes.length; i++){
 				d.z*t*t*t;
 			};
 
-			LightingScene.prototype.updateTorpedoDirection = function(torpedo, oldPos){
+			LightingScene.prototype.updateTorpedoDirection = function(torpedo, oldPos, deltaT){
 				var dx = torpedo.position.x - oldPos.x;
 				var dy = torpedo.position.y - oldPos.y;
 				var dz = torpedo.position.z - oldPos.z;
 
-				//torpedo.angle =  Math.atan2(dx, dz);
-				torpedo.inclinationX = Math.atan2(dy,dx);
-				torpedo.inclinationZ = Math.atan2(dy,dx);
+        //r = sqrt(x*x + y*y + z*z)
+        //t = arctan(y/x)
+        //p = arccos(z/r)
+
+        var raio = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+				torpedo.angle =  Math.atan2(dx, dz);
+				//torpedo.inclinationZ = Math.acos(dz/raio);
+        torpedo.inclinationZ = Math.PI/2 * deltaT;
+        //console.log(torpedo.inclinationZ);
+        //torpedo.inclinationX = Math.atan2(dy,dx);
 			};
 
-			LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3){
+			LightingScene.prototype.bezier3Angle = function(t, startPos, p1, p2, p3, dest){
 				var B0_dt = -3 * Math.pow((1-t),2);
 				var B1_dt = 3 * Math.pow((1-t),2) - 6 * t * (1-t);
 				var B2_dt = -3 * Math.pow(t,2) + 6 * t * (1-t);
@@ -495,8 +503,10 @@ for(var i = 0; i < this.torpedoes.length; i++){
 
 				var px_dt = (B0_dt * startPos.x) + (B1_dt * p1.x) + (B2_dt * p2.x) + (B3_dt * p3.x);
 				var py_dt = (B0_dt * startPos.y) + (B1_dt * p1.y) + (B2_dt * p2.y) + (B3_dt * p3.y);
+        var pz_dt = (B0_dt * startPos.z) + (B1_dt * p1.z) + (B2_dt * p2.z) + (B3_dt * p3.z);
 
-				var result = -Math.atan2(py_dt, px_dt);
+        dest.angle = Math.atan2(py_dt, px_dt);
+        dest.inclinationX = Math.atan2(py_dt, px_dt);
+        dest.inclinationZ = Math.atan2(py_dt, pz_dt);
 				//console.log(result);
-				return result;
 			};
